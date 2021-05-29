@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axios</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <h1>Axios example</h1>
+  <section>
+    <h1>Metoda GET - pobranie wszystkich ksążek</h1>
+    <button id="get-all-books">Pobierz książki</button>
+    <ul id="all-books-list"></ul>
+  </section>
+  <template id="book-template">
+    <li>
+      <article>
+        <h3 class="book__title"></h3>
+        <p class="book__author"></p>
+        <img class="book__image">
+        <p class="book__price"></p>
+      </article>
+    </li>
+  </template>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="./index.js"></script>
+</body>
+</html>
