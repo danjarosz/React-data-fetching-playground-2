@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Axios</title>
-  <link rel="stylesheet" href="./style.css" />
-</head>
-<body>
-  <h1>Axios example</h1>
-  <section>
-    <h1>Metoda GET - pobranie wszystkich produktów</h1>
-    <button id="get-all-products">Pobierz produkty</button>
-    <ul id="all-products-list"></ul>
-  </section>
-  <template id="product-template">
-    <li>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Axios</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h1>Axios example</h1>
+    <section>
+      <h1>Metoda GET - pobranie wszystkich produktów</h1>
+      <button id="get-all-products">Pobierz produkty</button>
+      <ul id="all-products-list"></ul>
+    </section>
+    <section>
+      <h1>Metoda GET - pobranie produktu o konkretnym id</h1>
+      <div id="product-container"></div>
+    </section>
+    <template id="product-template">
       <article>
         <h3 class="product__title"></h3>
         <p class="product__description"></p>
-        <img class="product__image">
+        <img class="product__image" />
         <p class="product__price"></p>
+        <button class="product__button">Podgląd</button>
       </article>
-    </li>
-  </template>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <script src="./index.js"></script>
-</body>
+    </template>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./index.js"></script>
+  </body>
 </html>
