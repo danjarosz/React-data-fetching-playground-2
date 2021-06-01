@@ -2,6 +2,9 @@
 const getAllProductsButton = document.getElementById("get-all-products");
 const allProductsList = document.getElementById("all-products-list");
 const templateElement = document.getElementById("product-template");
+const productsAPI = axios.create({
+  baseURL: "https://fakestoreapi.com",
+});
 
 const getAllBooks = async () => {
   if (!allProductsList) {
@@ -12,10 +15,7 @@ const getAllBooks = async () => {
   }
 
   try {
-    const response = await axios({
-      method: "GET",
-      url: "https://fakestoreapi.com/products?limit=7",
-    });
+    const response = await productsAPI.get("/products?limit=7");
     const { data } = response;
 
     //Czyszczenie przed renderem nowej listy
