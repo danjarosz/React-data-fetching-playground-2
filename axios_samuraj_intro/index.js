@@ -2,6 +2,7 @@
 const getAllProductsButton = document.getElementById("get-all-products");
 const allProductsList = document.getElementById("all-products-list");
 const productContainer = document.getElementById("product-container");
+const addProductForm = document.getElementById("add-new-product-form");
 const templateElement = document.getElementById("product-template");
 const productsAPI = axios.create({
   baseURL: "https://fakestoreapi.com/products",
@@ -69,7 +70,7 @@ const getAllProducts = async () => {
   }
 
   try {
-    const response = await productsAPI.get("?limit=7");
+    const response = await productsAPI.get("/");
     const { data } = response;
 
     //Czyszczenie przed renderem nowej listy
@@ -93,8 +94,49 @@ const getAllProducts = async () => {
   }
 };
 
+const addProduct = async () => {
+  const titleInput = document.getElementById("form-title");
+  const descriptionInput = document.getElementById("form-description");
+  const priceInput = document.getElementById("form-price");
+  const imageInput = document.getElementById("form-image");
+
+  if (!titleInput || !descriptionInput || !priceInput || !imageInput) {
+    console.warn("Brak pełnego formularza!");
+    return;
+  }
+
+  const newProduct = {
+    title: titleInput.value,
+    description: descriptionInput.value,
+    price: priceInput.value,
+    image: imageInput.value,
+  };
+
+  try {
+    const { data, status } = await productsAPI.post("", newProduct);
+    console.log(data);
+    titleInput.value = "";
+    descriptionInput.value = "";
+    priceInput.value = "";
+    imageInput.value = "";
+  } catch (err) {
+    console.warn(err);
+  }
+};
+
+const onFormSubmit = (e) => {
+  e.preventDefault();
+  addProduct();
+};
+
 if (!getAllProductsButton) {
-  console.warn("Nie znaleziono przycisku do pobierania książek!");
+  console.warn("Nie znaleziono przycisku do pobierania produktów!");
 } else {
   getAllProductsButton.addEventListener("click", getAllProducts);
+}
+
+if (!addProductForm) {
+  console.warn("nie znaleziono formularza dodawania produktu!");
+} else {
+  addProductForm.addEventListener("submit", onFormSubmit);
 }

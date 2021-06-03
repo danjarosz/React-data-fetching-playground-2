@@ -18,6 +18,33 @@
       <h1>Metoda GET - pobranie produktu o konkretnym id</h1>
       <div id="product-container"></div>
     </section>
+    <section>
+      <h1>Metoda POST - dodawanie nowego produktu</h1>
+      <form id="add-new-product-form">
+        <label>
+          Tytuł
+          <input id="form-title" required name="title" type="text" />
+        </label>
+        <label>
+          Opis
+          <input
+            id="form-description"
+            required
+            name="description"
+            type="text"
+          />
+        </label>
+        <label>
+          Cena
+          <input id="form-price" required name="price" type="number" />
+        </label>
+        <label>
+          Obrazek (URL)
+          <input id="form-image" required name="image" type="url" />
+        </label>
+        <button type="submit">Wyślij</button>
+      </form>
+    </section>
     <template id="product-template">
       <article>
         <h3 class="product__title"></h3>
