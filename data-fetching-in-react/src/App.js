@@ -1,25 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import UserTableAutonomous from "./components/UserTableAutonomous";
+import UserTableHOC from "./components/UserTableHOC";
+import UserTableReactHooks from "./components/UserTableReactHooks";
+import UserTableRenderProps from "./components/UserTableRenderProps";
+import SimpleUserTable from "./components/SimpleUserTable";
 
-function App() {
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h2> User Table - Autonomous</h2>
+      <UserTableAutonomous />
+      <h2> User Table - High Order Component</h2>
+      <UserTableHOC />
+      <h2> User Table - Render Props</h2>
+      <UserTableRenderProps children={SimpleUserTable} />
+      <h2> User Table - React Hooks</h2>
+      <UserTableReactHooks />
     </div>
   );
 }
-
-export default App;
