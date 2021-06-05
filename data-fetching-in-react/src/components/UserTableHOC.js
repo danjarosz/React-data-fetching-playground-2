@@ -12,19 +12,8 @@ class UserTableHOC extends Component {
     };
   }
 
-  render = () => (
-    <SimpleUserTable
-      data={this.state.users}
-      isFetching={this.state.isFetching}
-    />
-  );
-
-  componentDidMount() {
-    this.fetchUsers();
-  }
-
   fetchUsersWithFetchAPI = () => {
-    this.setState({ ...this.state, isFetching: true });
+    this.setState({ isFetching: true });
     fetch(USER_SERVICE_URL)
       .then((response) => response.json())
       .then((result) => {
@@ -32,11 +21,20 @@ class UserTableHOC extends Component {
       })
       .catch((e) => {
         console.log(e);
-        this.setState({ ...this.state, isFetching: false });
+        this.setState({ users: [], isFetching: false });
       });
   };
 
   fetchUsers = this.fetchUsersWithFetchAPI;
+
+  componentDidMount() {
+    this.fetchUsers();
+  }
+
+  render() {
+    const { users, isFetching } = this.state;
+    return <SimpleUserTable data={users} isFetching={isFetching} />;
+  }
 }
 
 export default UserTableHOC;
