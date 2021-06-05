@@ -5,23 +5,25 @@ import SimpleUserTable from "./SimpleUserTable";
 const USER_SERVICE_URL = "https://jsonplaceholder.typicode.com/users";
 
 function UserTableReactHooks() {
-  const [data, setData] = useState({ users: [], isFetching: false });
+  const [users, setUsers] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
+      setIsFetching(true);
       try {
-        setData({ users: data.users, isFetching: true });
         const response = await axios.get(USER_SERVICE_URL);
-        setData({ users: response.data, isFetching: false });
+        setUsers(response.data);
+        setIsFetching(false);
       } catch (e) {
         console.log(e);
-        setData({ users: data.users, isFetching: false });
+        setIsFetching(false);
       }
     };
     fetchUsers();
   }, []);
 
-  return <SimpleUserTable data={data.users} isFetching={data.isFetching} />;
+  return <SimpleUserTable data={users} isFetching={isFetching} />;
 }
 
 export default UserTableReactHooks;
