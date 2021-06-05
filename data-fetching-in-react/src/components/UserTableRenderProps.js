@@ -12,14 +12,8 @@ class UserTableRenderProps extends Component {
     };
   }
 
-  render = () => this.props.children(this.state);
-
-  componentDidMount() {
-    this.fetchUsers();
-  }
-
-  fetchUsersWithAxios = () => {
-    this.setState({ ...this.state, isFetching: true });
+  fetchUsers = () => {
+    this.setState({ isFetching: true });
     axios
       .get(USER_SERVICE_URL)
       .then((response) => {
@@ -27,11 +21,17 @@ class UserTableRenderProps extends Component {
       })
       .catch((e) => {
         console.log(e);
-        this.setState({ ...this.state, isFetching: false });
+        this.setState({ data: [], isFetching: false });
       });
   };
 
-  fetchUsers = this.fetchUsersWithAxios;
+  componentDidMount() {
+    this.fetchUsers();
+  }
+
+  render() {
+    return this.props.children(this.state);
+  }
 }
 
 export default UserTableRenderProps;

@@ -8,14 +8,15 @@ function rowClassNameFormat(row, rowIdx) {
 }
 
 const SimpleUserTable = (props) => {
+  const { data, isFetching } = props;
   return (
     <div>
-      <BootstrapTable data={props.data} trClassName={rowClassNameFormat}>
+      <BootstrapTable data={data} trClassName={rowClassNameFormat}>
         <TableHeaderColumn isKey dataField="id"></TableHeaderColumn>
         <TableHeaderColumn dataField="name"></TableHeaderColumn>
         <TableHeaderColumn dataField="username"></TableHeaderColumn>
       </BootstrapTable>
-      <p>{props.isFetching ? "Fetching users..." : ""}</p>
+      <p>{isFetching ? "Fetching users..." : ""}</p>
     </div>
   );
 };
