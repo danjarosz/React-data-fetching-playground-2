@@ -19,25 +19,20 @@ class UserTableAutonomous extends Component {
     };
   }
 
-  render() {
-    return (
-      <div>
-        <BootstrapTable
-          data={this.state.users}
-          trClassName={rowClassNameFormat}
-        >
-          <TableHeaderColumn isKey dataField="id"></TableHeaderColumn>
-          <TableHeaderColumn dataField="name"></TableHeaderColumn>
-          <TableHeaderColumn dataField="username"></TableHeaderColumn>
-        </BootstrapTable>
-        <p>{this.state.isFetching ? "Fetching users..." : ""}</p>
-      </div>
-    );
+  async fetchUsersAsync() {
+    try {
+      this.setState({ isFetching: true });
+      const response = await axios.get(USER_SERVICE_URL);
+      this.setState({ users: response.data, isFetching: false });
+    } catch (e) {
+      console.log(e);
+      this.setState({ users: [], isFetching: false });
+    }
   }
 
   componentDidMount() {
-    this.fetchUsers();
-    this.timer = setInterval(() => this.fetchUsers(), 5000);
+    this.fetchUsersAsync();
+    this.timer = setInterval(() => this.fetchUsersAsync(), 5000);
   }
 
   componentWillUnmount() {
@@ -45,18 +40,19 @@ class UserTableAutonomous extends Component {
     this.timer = null;
   }
 
-  async fetchUsersAsync() {
-    try {
-      this.setState({ ...this.state, isFetching: true });
-      const response = await axios.get(USER_SERVICE_URL);
-      this.setState({ users: response.data, isFetching: false });
-    } catch (e) {
-      console.log(e);
-      this.setState({ ...this.state, isFetching: false });
-    }
+  render() {
+    const { users, isFetching } = this.state;
+    return (
+      <div>
+        <BootstrapTable data={users} trClassName={rowClassNameFormat}>
+          <TableHeaderColumn isKey dataField="id"></TableHeaderColumn>
+          <TableHeaderColumn dataField="name"></TableHeaderColumn>
+          <TableHeaderColumn dataField="username"></TableHeaderColumn>
+        </BootstrapTable>
+        <p>{isFetching ? "Fetching users..." : ""}</p>
+      </div>
+    );
   }
-
-  fetchUsers = this.fetchUsersAsync;
 }
 
 export default UserTableAutonomous;
