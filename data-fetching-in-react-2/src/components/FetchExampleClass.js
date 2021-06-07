@@ -9,15 +9,14 @@ const Loader = () => (
   </div>
 );
 
-class FetchExample extends React.Component {
+class FetchExampleClass extends React.Component {
   state = {
     loading: false,
     hits: [],
     error: null,
   };
 
-  componentDidMount() {
-    this.setState({ loading: true, error: null });
+  getHits = () => {
     fetch(API + DEFAULT_QUERY)
       .then((response) => {
         if (response.ok && response.status === 200) {
@@ -38,6 +37,11 @@ class FetchExample extends React.Component {
           error,
         });
       });
+  };
+
+  componentDidMount() {
+    this.setState({ loading: true, error: null });
+    this.getHits();
   }
 
   render() {
@@ -67,4 +71,4 @@ class FetchExample extends React.Component {
   }
 }
 
-export default FetchExample;
+export default FetchExampleClass;
