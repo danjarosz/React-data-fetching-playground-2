@@ -8,6 +8,8 @@ function App() {
   const [path, setPath] = useState(
     "the-road-to-learn-react/the-road-to-learn-react"
   );
+  const [organization, setOrganization] = useState(null);
+  const [errors, setErrors] = useState(null);
 
   const onPathChangeHandler = (event) => {
     const path = event.target.value;
@@ -23,7 +25,11 @@ function App() {
     const onFetchFromGitHub = () => {
       axiosGitHubGraphQL
         .post("", { query: GET_ORGANIZATION })
-        .then((result) => console.log(result))
+        .then((result) => {
+          const { data } = result;
+          setOrganization(data.organization);
+          setErrors(data.errors);
+        })
         .catch((error) => console.error(error));
     };
 
