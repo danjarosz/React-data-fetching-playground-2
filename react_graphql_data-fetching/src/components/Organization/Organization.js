@@ -1,3 +1,5 @@
+import Repository from "../Repository/Repository";
+
 const Organization = ({ organization, errors }) => {
   if (errors) {
     return (
@@ -14,6 +16,9 @@ const Organization = ({ organization, errors }) => {
         <strong>Issues from Organization:</strong>
         <a href={organization.url}>{organization.name}</a>
       </p>
+      {organization.repository ? (
+        <Repository repository={organization.repository} />
+      ) : null}
     </div>
   );
 };

@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import axiosGitHubGraphQL from "./API/axios";
-import { GET_ORGANIZATION } from "./API/queries";
+import {
+  GET_ORGANIZATION,
+  GET_REPOSITORY_OF_ORGANIZATION,
+} from "./API/queries";
 import Organization from "./components/Organization/Organization";
 
 const TITLE = "React GraphQL GitHub Client";
@@ -26,13 +29,15 @@ function App() {
     const onFetchFromGitHub = async () => {
       try {
         const result = await axiosGitHubGraphQL.post("", {
-          query: GET_ORGANIZATION,
+          query: GET_REPOSITORY_OF_ORGANIZATION,
         });
+
         const {
           data: {
             data: { organization, errors },
           },
         } = result;
+
         setOrganization(organization);
         setErrors(errors);
       } catch (error) {
