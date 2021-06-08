@@ -3,6 +3,7 @@ import axiosGitHubGraphQL from "./API/axios";
 import {
   GET_ORGANIZATION,
   GET_REPOSITORY_OF_ORGANIZATION,
+  GET_ISSUES_OF_REPOSITORY,
 } from "./API/queries";
 import Organization from "./components/Organization/Organization";
 
@@ -29,7 +30,7 @@ function App() {
     const onFetchFromGitHub = async () => {
       try {
         const result = await axiosGitHubGraphQL.post("", {
-          query: GET_REPOSITORY_OF_ORGANIZATION,
+          query: GET_ISSUES_OF_REPOSITORY,
         });
 
         const {
