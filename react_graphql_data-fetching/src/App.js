@@ -3,8 +3,8 @@ import axiosGitHubGraphQL from "./API/axios";
 import {
   // GET_ORGANIZATION,
   // GET_REPOSITORY_OF_ORGANIZATION,
-  // GET_ISSUES_OF_REPOSITORY,
-  getIssuesOfRepositoryQuery,
+  GET_ISSUES_OF_REPOSITORY,
+  // getIssuesOfRepositoryQuery,
 } from "./API/queries";
 import Organization from "./components/Organization/Organization";
 
@@ -22,7 +22,11 @@ function App() {
       try {
         const [pathOrganization, pathRepository] = path.split("/");
         const result = await axiosGitHubGraphQL.post("", {
-          query: getIssuesOfRepositoryQuery(pathOrganization, pathRepository),
+          query: GET_ISSUES_OF_REPOSITORY,
+          variables: {
+            organization: pathOrganization,
+            repository: pathRepository,
+          },
         });
 
         const {
