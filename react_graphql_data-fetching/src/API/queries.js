@@ -30,8 +30,10 @@ query (
     name
     url
     repository(name: $repository) {
+      id
       name
       url
+      viewerHasStarred
       issues(first: 5, after: $cursor, states: [OPEN]) {
         edges {
           node {
@@ -79,4 +81,14 @@ export const getIssuesOfRepositoryQuery = (organization, repository) => `
       }
     }
   }
+`;
+
+export const ADD_STAR = `
+mutation ($repositoryId: ID!) {
+  addStar(input:{starrableId:$repositoryId}) {
+    starrable {
+      viewerHasStarred
+    }
+  }
+}
 `;

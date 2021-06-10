@@ -5,10 +5,18 @@ import {
   // GET_REPOSITORY_OF_ORGANIZATION,
   GET_ISSUES_OF_REPOSITORY,
   // getIssuesOfRepositoryQuery,
+  ADD_STAR,
 } from "./API/queries";
 import Organization from "./components/Organization/Organization";
 
 const TITLE = "React GraphQL GitHub Client";
+
+const addStarToRepository = (repositoryId) => {
+  return axiosGitHubGraphQL.post("", {
+    query: ADD_STAR,
+    variables: { repositoryId },
+  });
+};
 
 function App() {
   const [path, setPath] = useState(
@@ -60,14 +68,25 @@ function App() {
     [organization]
   );
 
-  const onFetchMoreIssues = useMemo(
-    () => () => {
-      const { endCursor } = organization.repository.issues.pageInfo;
+  const onFetchMoreIssues = () => {
+    const { endCursor } = organization.repository.issues.pageInfo;
 
-      onFetchFromGitHub(path, endCursor);
-    },
-    [path, organization]
-  );
+    onFetchFromGitHub(path, endCursor);
+  };
+
+  const onStarRepository = (repositoryId, viewerHasStarred) => {
+    addStarToRepository(repositoryId).then((mutationResult) => {
+      const { viewerHasStarred } = mutationResult.data.data.addStar.starrable;
+
+      setOrganization((prevOrganization) => ({
+        ...prevOrganization,
+        repository: {
+          ...prevOrganization.repository,
+          viewerHasStarred,
+        },
+      }));
+    });
+  };
 
   const onPathChangeHandler = (event) => {
     const path = event.target.value;
@@ -106,6 +125,7 @@ function App() {
           organization={organization}
           errors={errors}
           onFetchMoreIssues={onFetchMoreIssues}
+          onStarRepository={onStarRepository}
         />
       ) : (
         <p>No information yet ...</p>
