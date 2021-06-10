@@ -18,7 +18,7 @@ function App() {
   const [errors, setErrors] = useState(null);
 
   const onFetchFromGitHub = useMemo(
-    () => async (path) => {
+    () => async (path, cursor) => {
       try {
         const [pathOrganization, pathRepository] = path.split("/");
         const result = await axiosGitHubGraphQL.post("", {
@@ -26,22 +26,47 @@ function App() {
           variables: {
             organization: pathOrganization,
             repository: pathRepository,
+            cursor,
           },
         });
 
-        const {
-          data: {
-            data: { organization, errors },
-          },
-        } = result;
+        setErrors(result.data.data.errors);
 
-        setOrganization(organization);
-        setErrors(errors);
+        if (!cursor) {
+          setOrganization(result.data.data.organization);
+        } else {
+          setOrganization((prevOrganization) => {
+            const currentOrganization = result.data.data.organization;
+            const { edges: oldIssues } = prevOrganization.repository.issues;
+            const { edges: newIssues } = currentOrganization.repository.issues;
+            const updatedIssues = [...oldIssues, ...newIssues];
+
+            return {
+              ...currentOrganization,
+              repository: {
+                ...currentOrganization.repository,
+                issues: {
+                  ...currentOrganization.repository.issues,
+                  edges: updatedIssues,
+                },
+              },
+            };
+          });
+        }
       } catch (error) {
         console.error(error);
       }
     },
-    []
+    [organization]
+  );
+
+  const onFetchMoreIssues = useMemo(
+    () => () => {
+      const { endCursor } = organization.repository.issues.pageInfo;
+
+      onFetchFromGitHub(path, endCursor);
+    },
+    [path, organization]
   );
 
   const onPathChangeHandler = (event) => {
@@ -77,7 +102,11 @@ function App() {
       <hr />
 
       {organization ? (
-        <Organization organization={organization} errors={errors} />
+        <Organization
+          organization={organization}
+          errors={errors}
+          onFetchMoreIssues={onFetchMoreIssues}
+        />
       ) : (
         <p>No information yet ...</p>
       )}

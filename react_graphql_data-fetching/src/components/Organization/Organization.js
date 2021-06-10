@@ -1,6 +1,6 @@
 import Repository from "../Repository/Repository";
 
-const Organization = ({ organization, errors }) => {
+const Organization = ({ organization, errors, onFetchMoreIssues }) => {
   if (errors) {
     return (
       <p>
@@ -17,7 +17,10 @@ const Organization = ({ organization, errors }) => {
         <a href={organization.url}>{organization.name}</a>
       </p>
       {organization.repository ? (
-        <Repository repository={organization.repository} />
+        <Repository
+          repository={organization.repository}
+          onFetchMoreIssues={onFetchMoreIssues}
+        />
       ) : null}
     </div>
   );
