@@ -6,6 +6,7 @@ import {
   GET_ISSUES_OF_REPOSITORY,
   // getIssuesOfRepositoryQuery,
   ADD_STAR,
+  REMOVE_STAR,
 } from "./API/queries";
 import Organization from "./components/Organization/Organization";
 
@@ -14,6 +15,13 @@ const TITLE = "React GraphQL GitHub Client";
 const addStarToRepository = (repositoryId) => {
   return axiosGitHubGraphQL.post("", {
     query: ADD_STAR,
+    variables: { repositoryId },
+  });
+};
+
+const removeStarFromRepository = (repositoryId) => {
+  return axiosGitHubGraphQL.post("", {
+    query: REMOVE_STAR,
     variables: { repositoryId },
   });
 };
@@ -75,17 +83,32 @@ function App() {
   };
 
   const onStarRepository = (repositoryId, viewerHasStarred) => {
-    addStarToRepository(repositoryId).then((mutationResult) => {
-      const { viewerHasStarred } = mutationResult.data.data.addStar.starrable;
+    if (viewerHasStarred) {
+      removeStarFromRepository(repositoryId).then((mutationResult) => {
+        const { viewerHasStarred } =
+          mutationResult.data.data.removeStar.starrable;
 
-      setOrganization((prevOrganization) => ({
-        ...prevOrganization,
-        repository: {
-          ...prevOrganization.repository,
-          viewerHasStarred,
-        },
-      }));
-    });
+        setOrganization((prevOrganization) => ({
+          ...prevOrganization,
+          repository: {
+            ...prevOrganization.repository,
+            viewerHasStarred,
+          },
+        }));
+      });
+    } else {
+      addStarToRepository(repositoryId).then((mutationResult) => {
+        const { viewerHasStarred } = mutationResult.data.data.addStar.starrable;
+
+        setOrganization((prevOrganization) => ({
+          ...prevOrganization,
+          repository: {
+            ...prevOrganization.repository,
+            viewerHasStarred,
+          },
+        }));
+      });
+    }
   };
 
   const onPathChangeHandler = (event) => {

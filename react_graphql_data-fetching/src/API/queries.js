@@ -92,3 +92,13 @@ mutation ($repositoryId: ID!) {
   }
 }
 `;
+
+export const REMOVE_STAR = `
+mutation ($repositoryId: ID!) {
+  removeStar(input:{starrableId:$repositoryId}) {
+    starrable {
+      viewerHasStarred
+    }
+  }
+}
+`;
