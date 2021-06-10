@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axiosGitHubGraphQL from "./API/axios";
 import {
-  GET_ORGANIZATION,
-  GET_REPOSITORY_OF_ORGANIZATION,
-  GET_ISSUES_OF_REPOSITORY,
+  // GET_ORGANIZATION,
+  // GET_REPOSITORY_OF_ORGANIZATION,
+  // GET_ISSUES_OF_REPOSITORY,
+  getIssuesOfRepositoryQuery,
 } from "./API/queries";
 import Organization from "./components/Organization/Organization";
 
@@ -16,21 +17,12 @@ function App() {
   const [organization, setOrganization] = useState(null);
   const [errors, setErrors] = useState(null);
 
-  const onPathChangeHandler = (event) => {
-    const path = event.target.value;
-    setPath(path);
-  };
-
-  const onSubmitHandler = (event) => {
-    event.preventDefault();
-  };
-
-  useEffect(() => {
-    // data fetching
-    const onFetchFromGitHub = async () => {
+  const onFetchFromGitHub = useMemo(
+    () => async (path) => {
       try {
+        const [pathOrganization, pathRepository] = path.split("/");
         const result = await axiosGitHubGraphQL.post("", {
-          query: GET_ISSUES_OF_REPOSITORY,
+          query: getIssuesOfRepositoryQuery(pathOrganization, pathRepository),
         });
 
         const {
@@ -44,9 +36,23 @@ function App() {
       } catch (error) {
         console.error(error);
       }
-    };
+    },
+    []
+  );
 
-    onFetchFromGitHub();
+  const onPathChangeHandler = (event) => {
+    const path = event.target.value;
+    setPath(path);
+  };
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault();
+    onFetchFromGitHub(path);
+  };
+
+  useEffect(() => {
+    // data fetching
+    onFetchFromGitHub(path);
   }, []);
 
   return (
